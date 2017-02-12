@@ -1,0 +1,45 @@
+/* ==========================================================================
+   Default settings
+   ========================================================================== */
+
+html, input, select, textarea, button {
+  font:14px/1.428 Arial, "Geneva CY", sans-serif;
+  color:#222;
+}
+html,body {
+  height: 100%;
+  background-color: #fff;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+
+  &:hover, &:focus, &:active {
+    text-decoration: underline;
+  }
+}
+
+
+/*::selection {
+  text-shadow: none;
+}*/
+
+
+
+
+hr {
+  border-color: #ccc;
+}
+
+
+/* ==========================================================================
+   Global styles
+   ========================================================================== */
+.main-wrapper {
+  min-height: 100%;
+}
+
+.main-body {
+  padding-bottom: 50px;
+}
