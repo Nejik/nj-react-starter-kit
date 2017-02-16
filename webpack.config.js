@@ -78,8 +78,8 @@ const webpackConfig = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        loader: `babel-loader?${JSON.stringify(babelConfig)}`,
+        test: /\.jsx?$/,
+        loaders: [`babel-loader?${JSON.stringify(babelConfig)}`, 'webpack-module-hot-accept'],
         exclude: /node_modules/
       }
     ],
@@ -87,7 +87,8 @@ const webpackConfig = {
 };
 
 if (config.isDevelopment) {
-  webpackConfig.entry.unshift('webpack-hot-middleware/client?overlay=false&reload=true&noInfo=true&overlay=false');
+  babelConfig.plugins.unshift('react-hot-loader/babel');
+  webpackConfig.entry.unshift('react-hot-loader/patch', 'webpack-hot-middleware/client?overlay=false&reload=true&noInfo=true&overlay=false');
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
   webpackConfig.plugins.push(new webpack.NoEmitOnErrorsPlugin());
 

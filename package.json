@@ -11,7 +11,9 @@
       "es2015",
       "stage-0"
     ],
-    "plugins": ["transform-decorators-legacy"]
+    "plugins": [
+      "transform-decorators-legacy"
+    ]
   },
   "dependencies": {
     "normalize.css": "^5.0.0",
@@ -22,7 +24,6 @@
     "redux-thunk": "^2.2.0",
     "svg4everybody": "^2.1.4"
   },
-  
   "devDependencies": {
     "app-root-path": "^2.0.1",
     "assets-webpack-plugin": "^3.5.1",
@@ -57,10 +58,12 @@
     "postcss-inline-svg": "^2.3.0",
     "postcss-loader": "^1.2.2",
     "postcss-reporter": "^3.0.0",
+    "react-hot-loader": "^3.0.0-beta.6",
     "style-loader": "^0.13.1",
     "webpack": "^2.2.1",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1",
+    "webpack-module-hot-accept": "^1.0.4",
     "yargs": "^6.6.0"
   }
 }
