@@ -1,14 +1,23 @@
 import {vendor} from 'vendor/vendor.js';
 vendor();
 
-import React, {PropTypes} from 'react';
+import React, {PropTypes, Component} from 'react';
 import ReactDOM from 'react-dom';
 
-class App extends React.Component {
+import Header from 'header/header'
+import Footer from 'footer/footer'
+
+class App extends Component {
   render() {
     return (
-      <div>
-        React app
+      <div className="wrapper">
+        <Header />
+        <main className="body">
+          <div className="inner">
+            app
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }

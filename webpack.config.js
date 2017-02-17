@@ -36,7 +36,8 @@ const webpackConfig = {
       config.src,
       config.components,
       "node_modules"
-    ]
+    ],
+    extensions: [".jsx", ".js", ".json"]
   },
 
   // Switch loaders to debug or release mode
