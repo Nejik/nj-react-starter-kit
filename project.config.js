@@ -6,6 +6,7 @@ const pkg = require('./package.json');
 
 const isVerbose = argv.verbose;
 let isDevelopment = process.env.NODE_ENV !== "production" && argv.env !== "production";
+const port = process.env.PORT || 3000;
 
 const distString = isDevelopment ? 'dist' : 'prod';
 const dist = root.resolve(distString);
@@ -15,7 +16,7 @@ let paths = {
   name: pkg.name,
   src: root.resolve('src'),
   dist: dist,
-  publicPath: '/',
+  publicPath: '/',//we need localhost publicPath in development mode as fix for webpack (not showing background images in css with source maps)
   root: root.toString(),
   vendor: root.resolve('src/vendor'),
   fonts: root.resolve('src/fonts'),
@@ -24,6 +25,7 @@ let paths = {
   
   isVerbose: isVerbose,
   isDevelopment: isDevelopment,
+  port: port,
   
   html: {
     src: [root.resolve('src/*.ejs'), root.resolve('src/pages/**/*.ejs')],

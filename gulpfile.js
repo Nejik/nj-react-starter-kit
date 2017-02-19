@@ -227,7 +227,7 @@ gulp.task('images:svgColored', function () {
               .pipe(gulp.dest(config.svgColoredSprites.dist))
 })
 gulp.task('images:copy', function () {
-  return gulp .src(config.img.src, {since: gulp.lastRun('images:copy')})
+  return gulp .src(config.img.src)
               .pipe(plumber({errorHandler: function (error) {
                 console.log(error)
                 this.emit('end');
@@ -240,9 +240,26 @@ gulp.task('images', gulp.parallel('images:copy','images:svg','images:svgColored'
 
 gulp.task('watch', function () {
   gulp.watch(config.html.watch, gulp.series('html'));
-  gulp.watch(config.css.watch, gulp.series('css'));
+  // gulp.watch(config.css.watch, gulp.series('css'));
+  //watch webpack css file
+  // gulp.watch('**/webpack.styles.css', function () {
+  //   return gulp.src('dist/webpack.styles.css')
+  //       .pipe(bs.stream());
+  // });
+  gulp.watch('dist/**/*.css', function () {
+    return gulp.src('dist/**/*.css')
+        .pipe(bs.stream());
+  });
 
   gulp.watch(config.img.watch, gulp.series('images'));
+})
+
+gulp.task('serve:reload', function (cb) {
+  // console.log('reload')
+  // if(config.isDevelopment) bs.reload();
+  // cb();
+  return gulp.src('dist/webpack.styles.css')
+        .pipe(bs.stream());
 })
 
 gulp.task('serve', function (cb) {//serve contains js task, because of webpack integration
@@ -262,6 +279,7 @@ gulp.task('serve', function (cb) {//serve contains js task, because of webpack i
           sound: true,
         });
       } else {
+        console.log('done')
         bs.stream()
       }
 
@@ -270,8 +288,8 @@ gulp.task('serve', function (cb) {//serve contains js task, because of webpack i
           
         bs.init({
           open: process.env.OPEN,
-          port: process.env.PORT || 3000,
-          ui: { port: Number(process.env.PORT || 3000) + 1 },
+          port: config.port,
+          ui: { port: config.port + 1 },
           server: {
             baseDir: config.dist,
             middleware: [
@@ -299,4 +317,4 @@ gulp.task('build', gulp.parallel('html','css','webpack','images'))
 
 gulp.task('prod', gulp.series(gulp.parallel('clean','setProduction'), 'build', 'cssMergeStyles'))
 
-gulp.task('default', gulp.series('build', gulp.parallel('serve','watch')))
+gulp.task('default', gulp.series('html','css','images', gulp.parallel('serve','watch')))
