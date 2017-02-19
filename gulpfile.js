@@ -87,6 +87,17 @@ gulp.task('html', function () {
             .pipe(gulpIf(config.isDevelopment, bs.stream()))
 })
 
+gulp.task('css:createEmptyFiles', function (cb) {
+  //create styles empty placeholder files to avoid errors in console
+  if (!fs.existsSync(config.dist)){
+    fs.mkdirSync(config.dist);
+  }
+  fs.writeFileSync(path.join(config.dist, config.css.concatGulp), '');
+  fs.writeFileSync(path.join(config.dist, config.css.concatWebpack), '');
+
+  
+  cb();
+})
 //hot reloading durinig development without webpack works much much faster, use it in usual html/css coding, not angular/react/etc projects
 gulp.task('css', function () {
   return gulp .src(config.css.src)
@@ -106,14 +117,13 @@ gulp.task('css', function () {
               .pipe(gulpIf(config.isDevelopment, sourcemaps.init()))
               .pipe(postcss(postcssConfig.plugins))
               .pipe(gulpIf(config.isDevelopment, sourcemaps.write()))
-              .pipe(rename(config.css.concat))
+              .pipe(rename(config.css.concatGulp))
               .pipe(gulp.dest(config.css.dist))
-              .pipe(gulpIf(config.isDevelopment, bs.stream()))
 })
 
 //merge styles from gulp with styles from webpack
-gulp.task('cssMergeStyles', function (cb) {
-  let webpackCssFile = path.join(config.dist, config.css.webpackStyleName);
+gulp.task('css:mergeStyles', function (cb) {
+  let webpackCssFile = path.join(config.dist, config.css.concatWebpack);
   
   if (fs.existsSync(webpackCssFile)) {
     return gulp .src([path.join(config.dist, config.css.concat), webpackCssFile])
@@ -239,36 +249,10 @@ gulp.task('images:copy', function () {
 gulp.task('images', gulp.parallel('images:copy','images:svg','images:svgColored'))
 
 gulp.task('watch', function () {
-  gulp.watch(config.html.watch, gulp.series('html'));
-  // gulp.watch(config.css.watch, gulp.series('css'));
-  //watch webpack css file
-  // gulp.watch('**/webpack.styles.css', function () {
-  //   return gulp.src('dist/webpack.styles.css')
-  //       .pipe(bs.stream());
-  // });
-  gulp.watch('dist/**/*.css', function () {
-    return gulp.src('dist/**/*.css')
-        .pipe(bs.stream());
-  });
-  // gulp.task('watch', function() {
-  //   browserSync({server: {baseDir: 'public'}}, function() {
-  //       gulp.watch('public/**').on('change', function(file) {
-  //           if (file.path.match(/\.css$/)) {
-  //               browserSync.reload(file);
-  //           }
-  //       });
-  //   });
-  // });
-
+  gulp.watch(config.html.watch, gulp.series('html'));//build and reload html
+  gulp.watch(config.css.watch, gulp.series('css'));//build css
+  gulp.watch("dist/*.css").on('change', bs.reload);//reload css
   gulp.watch(config.img.watch, gulp.series('images'));
-})
-
-gulp.task('serve:reload', function (cb) {
-  // console.log('reload')
-  // if(config.isDevelopment) bs.reload();
-  // cb();
-  return gulp.src('dist/webpack.styles.css')
-        .pipe(bs.stream());
 })
 
 gulp.task('serve', function (cb) {//serve contains js task, because of webpack integration
@@ -288,7 +272,6 @@ gulp.task('serve', function (cb) {//serve contains js task, because of webpack i
           sound: true,
         });
       } else {
-        console.log('done')
         bs.stream()
       }
 
@@ -322,8 +305,8 @@ gulp.task('serve', function (cb) {//serve contains js task, because of webpack i
 
 
 
-gulp.task('build', gulp.parallel('html','css','webpack','images'))
+gulp.task('build', gulp.parallel('html','css:createEmptyFiles','css','webpack','images'))
 
-gulp.task('prod', gulp.series(gulp.parallel('clean','setProduction'), 'build', 'cssMergeStyles'))
+gulp.task('prod', gulp.series(gulp.parallel('clean','setProduction'), 'build', 'css:mergeStyles'))
 
-gulp.task('default', gulp.series('html','css','images', gulp.parallel('serve','watch')))
+gulp.task('default', gulp.series('html','css:createEmptyFiles','css','images', gulp.parallel('serve','watch')))

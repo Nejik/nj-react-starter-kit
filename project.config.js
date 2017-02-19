@@ -36,7 +36,9 @@ let paths = {
   css: {
     dir: root.resolve('src/css'),
     src: [root.resolve('src/css/styles.css')],
-    concat: 'styles.css',//final name of builded css file
+    concatGulp: 'gulp.styles.css',//final name of css file builed by gulp
+    concatWebpack: 'webpack.styles.css',//final name of css file builed by webpack
+    concatProd: 'styles.css', 
     dist: dist,
     webpackStyleName: 'webpack.styles.css',//temporary file with builded styles from webpack, after build it will be merged in main styles files
     watch: [root.resolve('src/**/*.css')]

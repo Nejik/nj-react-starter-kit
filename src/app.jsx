@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 import Header from 'header/header'
 import Footer from 'footer/footer'
 
-import 'css/test.css'
+// import 'css/test.css'
 
 class App extends Component {
   render() {

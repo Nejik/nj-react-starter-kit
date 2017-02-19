@@ -75,12 +75,11 @@ const webpackConfig = {
       path: config.js.dist,
       filename: 'assets.json',
       prettyPrint: true,
+      update: true
     }),
     new WriteFilePlugin({
       test: /\.css$/,
-      force:true
-      // useHashIndex: true,
-      // log: false
+      log: false
     })
   ],
 
@@ -93,18 +92,14 @@ const webpackConfig = {
       },
       {
         test: /\.(svg|jpg|jpeg|png)$/,
-        // loader: "file-loader"
         use: [
           {
-            loader: 'url-loader',
+            loader: 'file-loader',
             options: {
               name: '[path][name].[ext]',
-              // publicPath: 'http://localhost:3000/'
             }
           }
         ]
-        // loader: "file-loader?name=[path][name].[ext]"
-        // loader: "url-loader?name=img/[name].[ext]"
       }
     ],
   }
@@ -114,9 +109,9 @@ if (config.isDevelopment) {
   babelConfig.plugins.unshift('react-hot-loader/babel');
   webpackConfig.entry.unshift('react-hot-loader/patch', 'webpack-hot-middleware/client?overlay=false&reload=true&noInfo=true&overlay=false');
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-  // webpackConfig.plugins.push(new webpack.NoEmitOnErrorsPlugin());
+  webpackConfig.plugins.push(new webpack.NoEmitOnErrorsPlugin());
 
-  webpackConfig.plugins.push(new ExtractTextPlugin(config.css.webpackStyleName));
+  webpackConfig.plugins.push(new ExtractTextPlugin(config.css.concatWebpack));
   webpackConfig.module.rules.push({
                                     test: /\.css$/,
                                     use: ExtractTextPlugin.extract({
@@ -125,7 +120,7 @@ if (config.isDevelopment) {
                                               {
                                                 loader: 'css-loader',
                                                 options: {
-                                                  // url:false,
+                                                  url:false,
                                                   sourceMap: true,
                                                   importLoaders: 1
                                                 }
@@ -135,30 +130,10 @@ if (config.isDevelopment) {
                                           })
                                     
                                   });
-
-  // webpackConfig.module.rules.push({
-  //    test: /.css$/,
-  //    use: [
-  //      'style-loader',
-  //      {
-  //         loader: 'css-loader',
-  //         options: {
-  //           // url: false,
-  //           // root: 'http://localhost:3000/',
-  //           // sourceMap: true,
-  //           importLoaders: 1
-  //         }
-  //      },
-  //     //  'css-loader?-url&sourceMap=inline&importLoaders=1',
-  //     {
-  //       loader: 'postcss-loader'
-  //     }
-  //    ]
-  // });
 } else {
   webpackConfig.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
 
-  webpackConfig.plugins.push(new ExtractTextPlugin(config.css.webpackStyleName));
+  webpackConfig.plugins.push(new ExtractTextPlugin(config.css.concatWebpack));
   webpackConfig.module.rules.push({
                                     test: /\.css$/,
                                     use: ExtractTextPlugin.extract({
@@ -167,9 +142,7 @@ if (config.isDevelopment) {
                                               {
                                                 loader: 'css-loader',
                                                 options: {
-                                                  // root: 'http://localhost:3000/',
-                                                  // url:false,
-                                                  // sourceMap: true,
+                                                  url:false,
                                                   importLoaders: 1
                                                 }
                                               },

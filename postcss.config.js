@@ -27,21 +27,21 @@ let postcssConfig = {
     cssReporter({
       throwError:true
     }),
-    // sprite({
-    //     stylesheetPath : config.css.dist,
-    //     spritePath: config.img.dist,
-    //     basePath: config.src,
-    //     spritesmith: {
-    //       padding: 5
-    //     },
-    //     // verbose: true,
-    //     filterBy: function(image) {
-    //       if (image.url.indexOf('/sprites/') === -1) {
-    //         return Promise.reject(new Error('Not in sprite folder.'));
-    //       }
-    //       return Promise.resolve();
-    //     }
-    // })
+    sprite({
+        stylesheetPath : config.css.dist,
+        spritePath: config.img.dist,
+        basePath: config.src,
+        spritesmith: {
+          padding: 5
+        },
+        verbose: config.isVerbose,
+        filterBy: function(image) {
+          if (image.url.indexOf('/sprites/') === -1) {
+            return Promise.reject(new Error('Not in sprite folder.'));
+          }
+          return Promise.resolve();
+        }
+    })
   ]
 }
 
