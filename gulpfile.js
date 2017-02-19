@@ -250,6 +250,15 @@ gulp.task('watch', function () {
     return gulp.src('dist/**/*.css')
         .pipe(bs.stream());
   });
+  // gulp.task('watch', function() {
+  //   browserSync({server: {baseDir: 'public'}}, function() {
+  //       gulp.watch('public/**').on('change', function(file) {
+  //           if (file.path.match(/\.css$/)) {
+  //               browserSync.reload(file);
+  //           }
+  //       });
+  //   });
+  // });
 
   gulp.watch(config.img.watch, gulp.series('images'));
 })
