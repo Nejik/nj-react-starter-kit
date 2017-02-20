@@ -38,7 +38,7 @@ export default class App extends Component {
 }
 render( <Provider store = {store}>
           <App />
-        </Provider>, document.querySelector('.app'));
+        </Provider>, document.getElementById('app'));
 
 
 
