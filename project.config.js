@@ -16,7 +16,7 @@ let paths = {
   name: pkg.name,
   src: root.resolve('src'),
   dist: dist,
-  publicPath: '/',//we need localhost publicPath in development mode as fix for webpack (not showing background images in css with source maps)
+  publicPath: '/',
   root: root.toString(),
   vendor: root.resolve('src/vendor'),
   fonts: root.resolve('src/fonts'),
