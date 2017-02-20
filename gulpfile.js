@@ -101,7 +101,7 @@ gulp.task('css:createEmptyFiles', function (cb) {
   cb();
 })
 
-//hot reloading durinig development without webpack works much much faster, use it in usual html/css coding, not angular/react/etc projects
+//hot reloading durinig development without webpack works much much faster
 gulp.task('css:common', function () {
   return gulp .src(config.css.src)
               .pipe(plumber({
@@ -251,7 +251,7 @@ gulp.task('images', gulp.parallel('images:copy','images:svg','images:svgColored'
 
 gulp.task('watch', function () {
   gulp.watch(config.html.watch, gulp.series('html'));//build and reload html
-  gulp.watch(config.css.watch, gulp.series('css'));//build css
+  gulp.watch(config.css.watch, gulp.series('css:common'));//build css
   gulp.watch("dist/*.css").on('change', bs.reload);//reload css
   gulp.watch(config.img.watch, gulp.series('images'));
 })
