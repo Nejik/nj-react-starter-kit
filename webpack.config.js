@@ -126,7 +126,7 @@ const webpackConfig = {
 
 if (config.isDevelopment) {
   babelConfig.plugins.unshift('react-hot-loader/babel');
-  webpackConfig.entry.unshift('react-hot-loader/patch', 'webpack-hot-middleware/client?overlay=false&reload=true&noInfo=true&overlay=false');
+  webpackConfig.entry.unshift('react-hot-loader/patch', 'webpack-hot-middleware/client?overlay=false&reload=true&noInfo=true');
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
   webpackConfig.plugins.push(new webpack.NoEmitOnErrorsPlugin());
 } else {
