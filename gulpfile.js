@@ -73,7 +73,9 @@ gulp.task('html', function () {
                 this.emit('end');
               }
             }))
-            .pipe(ejs({},//data, A hash object where each key corresponds to a variable in your template.
+            .pipe(ejs({//data, A hash object where each key corresponds to a variable in your template.
+              config: config
+            },
             {//options, A hash object for ejs options.
               root: config.src
             },
@@ -122,16 +124,22 @@ gulp.task('css', function () {
 })
 
 //merge styles from gulp with styles from webpack
-gulp.task('css:mergeStyles', function (cb) {
-  let webpackCssFile = path.join(config.dist, config.css.concatWebpack);
+// gulp.task('css:mergeStyles', function (cb) {
+//   let webpackCssFile = path.join(config.dist, config.css.concatWebpack);
   
-  if (fs.existsSync(webpackCssFile)) {
-    return gulp .src([path.join(config.dist, config.css.concat), webpackCssFile])
-              .pipe(concat(config.css.concat))
+//   if (fs.existsSync(webpackCssFile)) {
+//     return gulp .src([path.join(config.dist, config.css.concat), webpackCssFile])
+//               .pipe(concat(config.css.concat))
+//               .pipe(gulp.dest(config.css.dist))
+//   } else {
+//     cb();
+//   }
+// })
+gulp.task('css:mergeStyles', function (cb) {
+  return gulp .src([path.join(config.dist, config.css.concatGulp), path.join(config.dist, config.css.concatWebpack)])
+              .pipe(concat(config.css.concatProd))
               .pipe(gulp.dest(config.css.dist))
-  } else {
-    cb();
-  }
+
 })
 
 gulp.task('webpack', function (callback) {
