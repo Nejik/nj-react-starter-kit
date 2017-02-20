@@ -80,7 +80,8 @@ const webpackConfig = {
     new WriteFilePlugin({
       test: /\.css$/,
       log: false
-    })
+    }),
+    new ExtractTextPlugin(config.css.concatWebpack)
   ],
 
   module: {
@@ -100,7 +101,25 @@ const webpackConfig = {
             }
           }
         ]
-      }
+      },
+      {
+      test: /\.css$/,
+      use: ExtractTextPlugin.extract({
+              fallback: "style-loader",
+              use: [
+                {
+                  loader: 'css-loader',
+                  options: {
+                    url:false,
+                    sourceMap: config.isDevelopment,
+                    importLoaders: 1
+                  }
+                },
+                'postcss-loader'
+              ]
+            })
+      
+    }
     ],
   }
 };
@@ -110,48 +129,8 @@ if (config.isDevelopment) {
   webpackConfig.entry.unshift('react-hot-loader/patch', 'webpack-hot-middleware/client?overlay=false&reload=true&noInfo=true&overlay=false');
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
   webpackConfig.plugins.push(new webpack.NoEmitOnErrorsPlugin());
-
-  webpackConfig.plugins.push(new ExtractTextPlugin(config.css.concatWebpack));
-  webpackConfig.module.rules.push({
-                                    test: /\.css$/,
-                                    use: ExtractTextPlugin.extract({
-                                            fallback: "style-loader",
-                                            use: [
-                                              {
-                                                loader: 'css-loader',
-                                                options: {
-                                                  url:false,
-                                                  sourceMap: true,
-                                                  importLoaders: 1
-                                                }
-                                              },
-                                              'postcss-loader'
-                                            ]
-                                          })
-                                    
-                                  });
 } else {
   webpackConfig.plugins.push(new webpack.optimize.AggressiveMergingPlugin());
-
-  webpackConfig.plugins.push(new ExtractTextPlugin(config.css.concatWebpack));
-  webpackConfig.module.rules.push({
-                                    test: /\.css$/,
-                                    use: ExtractTextPlugin.extract({
-                                            fallback: "style-loader",
-                                            use: [
-                                              {
-                                                loader: 'css-loader',
-                                                options: {
-                                                  url:false,
-                                                  importLoaders: 1
-                                                }
-                                              },
-                                              'postcss-loader'
-                                            ]
-                                          })
-                                    
-                                  });
-
   webpackConfig.plugins.push(new webpack.optimize.UglifyJsPlugin({ compress: { warnings: config.isVerbose } }));
 }
 
