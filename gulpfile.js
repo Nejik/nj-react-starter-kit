@@ -100,8 +100,9 @@ gulp.task('css:createEmptyFiles', function (cb) {
   
   cb();
 })
+
 //hot reloading durinig development without webpack works much much faster, use it in usual html/css coding, not angular/react/etc projects
-gulp.task('css', function () {
+gulp.task('css:common', function () {
   return gulp .src(config.css.src)
               .pipe(plumber({
                 errorHandler: function (error) {
@@ -123,24 +124,16 @@ gulp.task('css', function () {
               .pipe(gulp.dest(config.css.dist))
 })
 
-//merge styles from gulp with styles from webpack
-// gulp.task('css:mergeStyles', function (cb) {
-//   let webpackCssFile = path.join(config.dist, config.css.concatWebpack);
-  
-//   if (fs.existsSync(webpackCssFile)) {
-//     return gulp .src([path.join(config.dist, config.css.concat), webpackCssFile])
-//               .pipe(concat(config.css.concat))
-//               .pipe(gulp.dest(config.css.dist))
-//   } else {
-//     cb();
-//   }
-// })
 gulp.task('css:mergeStyles', function (cb) {
   return gulp .src([path.join(config.dist, config.css.concatGulp), path.join(config.dist, config.css.concatWebpack)])
               .pipe(concat(config.css.concatProd))
               .pipe(gulp.dest(config.css.dist))
 
 })
+
+gulp.task('css', gulp.series('css:createEmptyFiles', 'css:common'))
+
+
 
 gulp.task('webpack', function (callback) {
   webpack(webpackConfig, function(err, stats) {
@@ -313,8 +306,8 @@ gulp.task('serve', function (cb) {//serve contains js task, because of webpack i
 
 
 
-gulp.task('build', gulp.parallel('html','css:createEmptyFiles','css','webpack','images'))
+gulp.task('build', gulp.parallel('html', 'css', 'webpack','images'))
 
-gulp.task('prod', gulp.series(gulp.parallel('clean','setProduction'), 'build', 'css:mergeStyles'))
+gulp.task('prod', gulp.series(gulp.parallel('clean', 'setProduction'), 'build', 'css:mergeStyles'))
 
-gulp.task('default', gulp.series('html','css:createEmptyFiles','css','images', gulp.parallel('serve','watch')))
+gulp.task('default', gulp.series('html', 'css', 'images', gulp.parallel('serve','watch')))
