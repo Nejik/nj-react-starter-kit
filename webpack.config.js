@@ -13,6 +13,14 @@ const babelConfig = Object.assign({}, pkg.babel, {
   babelrc: false,
   cacheDirectory: true,
 });
+let jsUse = [
+          {
+            loader: `babel-loader?${JSON.stringify(babelConfig)}`
+          }
+        ];
+if(config.isDevelopment) jsUse.push({
+            loader: 'webpack-module-hot-accept'
+          })
 
 const webpackConfig = {
   // The base directory for resolving the entry option
@@ -88,7 +96,7 @@ const webpackConfig = {
     rules: [
       {
         test: /\.jsx?$/,
-        loaders: [`babel-loader?${JSON.stringify(babelConfig)}`, 'webpack-module-hot-accept'],
+        use: jsUse,
         exclude: /node_modules/
       },
       {
@@ -103,23 +111,23 @@ const webpackConfig = {
         ]
       },
       {
-      test: /\.css$/,
-      use: ExtractTextPlugin.extract({
-              fallback: "style-loader",
-              use: [
-                {
-                  loader: 'css-loader',
-                  options: {
-                    url:false,
-                    sourceMap: config.isDevelopment,
-                    importLoaders: 1
-                  }
-                },
-                'postcss-loader'
-              ]
-            })
-      
-    }
+        test: /\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                url: false,
+                sourceMap: config.isDevelopment,
+                importLoaders: 1
+              }
+            },
+            'postcss-loader'
+          ]
+        })
+
+      }
     ],
   }
 };
