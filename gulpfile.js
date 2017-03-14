@@ -249,6 +249,10 @@ gulp.task('images:copy', function () {
 })
 gulp.task('images', gulp.parallel('images:copy','images:svg','images:svgColored'))
 
+gulp.task('copy', function () {
+  return gulp .src(config.copy, {read:false})
+              .pipe(gulp.dest(config.dist))
+})
 gulp.task('watch', function () {
   gulp.watch(config.html.watch, gulp.series('html'));//build and reload html
   gulp.watch(config.css.watch, gulp.series('css:common'));//build css
