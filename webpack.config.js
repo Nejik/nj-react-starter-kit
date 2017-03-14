@@ -71,12 +71,12 @@ const webpackConfig = {
     }),
     // Emit a JSON file with assets paths
     // https://github.com/sporto/assets-webpack-plugin#options
-    new AssetsPlugin({
-      path: config.js.dist,
-      filename: 'assets.json',
-      prettyPrint: true,
-      update: true
-    }),
+    // new AssetsPlugin({
+    //   path: config.js.dist,
+    //   filename: 'assets.json',
+    //   prettyPrint: true,
+    //   update: true
+    // }),
     new WriteFilePlugin({
       test: /\.css$/,
       log: false
