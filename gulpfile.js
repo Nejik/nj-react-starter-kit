@@ -39,7 +39,7 @@ global.HMR = true;
 
 
 gulp.task('clean', function () {
-  return del(['dist','prod'])
+  return del(['build','dist'])
 })
 
 gulp.task('setProduction', function (cb) {
@@ -308,7 +308,7 @@ gulp.task('check', function() {
     port: config.port,
     ui: { port: config.port + 1 },
     server: {
-      baseDir: 'prod',
+      baseDir: 'build',
     },
   });
 })
